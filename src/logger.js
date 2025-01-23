@@ -1,3 +1,7 @@
 export default function logger(url) {
-    return ("" + url + Date.now())
+    return (url + " " + dateFormat(new Date()))
+}
+
+function dateFormat(date) {
+    return date.toLocaleString()
 }
