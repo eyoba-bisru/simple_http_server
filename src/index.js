@@ -14,15 +14,21 @@ server.on('request', (req, res) => {
     console.log(loggerValue)
 
     if (url === '/') {
-        return res.end("Hello")
+        return res.end(fs.readFileSync(path.join(process.cwd(), 'static', 'index.html')))
     }
 
     const static_path = path.join(process.cwd(), 'static', url)
 
+    if (!fs.existsSync(static_path) || !fs.statSync(static_path).isFile()) {
+        res.writeHead(404, { 'Content-Type': 'text/html' })
+        return res.end(fs.readFileSync(path.join(process.cwd(), 'static', 'not-found.html')))
+    }
+
     try {
-        const readStream = fs.createReadStream(static_path)
-        readStream.pipe(res)
-        return
+        // const readStream = fs.createReadStream(static_path)
+        // readStream.pipe(res)
+        res.writeHead(200, { 'Content-Type': 'text/html' })
+        return res.end(fs.readFileSync(static_path))
     } catch (err) {
         console.log(err)
     }
