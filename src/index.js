@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import http from 'node:http'
 import path from 'node:path'
 import logger, { dateFormat } from './logger.js'
+import { api } from './api/index.js'
 
 const PORT = 8000
 
@@ -15,12 +16,18 @@ server.on('request', (req, res) => {
 
         const url = req.url
 
+        const urlSplit = url.split('/')
+
         const loggerValue = logger(url)
         fs.appendFile(logPath, (loggerValue + "\n"), (err) => {
             if (err) console.log(err)
         })
 
         console.log(loggerValue)
+
+        if (urlSplit[1] === 'api') {
+            return api(url, req, res)
+        }
 
         if (url === '/') {
             return res.end(fs.readFileSync(path.join(process.cwd(), 'static', 'index.html')))
