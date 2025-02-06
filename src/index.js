@@ -4,7 +4,7 @@ import path from 'node:path'
 import logger, { dateFormat } from './logger.js'
 import { api } from './api/index.js'
 
-const PORT = 8000
+const PORT = 4000
 
 const server = http.createServer()
 
